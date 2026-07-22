@@ -41,11 +41,22 @@
           pkgs = import nixpkgs { inherit system; };
           localPatches = import ./nix/patches.nix;
 
+          patchedSource =
+            name: src: patches:
+            if patches == [ ] then
+              src
+            else
+              pkgs.applyPatches {
+                inherit name src patches;
+              };
+
+          opensshSource = patchedSource "openssh-10.4p1-patched-source" openssh-src localPatches.openssh;
+          libssh2Source = patchedSource "libssh2-1.11.1-patched-source" libssh2-src localPatches.libssh2;
+
           mkOpenSsh =
             withTests:
             pkgs.callPackage ./nix/packages/openssh.nix {
-              src = openssh-src;
-              patches = localPatches.openssh;
+              src = opensshSource;
               inherit withTests;
             };
 
@@ -56,8 +67,7 @@
             withTests:
             pkgs.callPackage ./nix/packages/libssh2.nix (
               {
-                src = libssh2-src;
-                patches = localPatches.libssh2;
+                src = libssh2Source;
                 inherit withTests;
               }
               // pkgs.lib.optionalAttrs withTests {
@@ -159,8 +169,8 @@
 
               if [ -d third_party/openssh ] && [ -d third_party/libssh2 ]; then
                 mkdir -p third_party/nix
-                link_dev_input third_party/openssh/src ${openssh-src}
-                link_dev_input third_party/libssh2/src ${libssh2-src}
+                link_dev_input third_party/openssh/src ${opensshSource}
+                link_dev_input third_party/libssh2/src ${libssh2Source}
                 link_dev_input third_party/nix/openssl ${opensslRoot}
                 link_dev_input third_party/nix/zlib ${zlibRoot}
                 link_dev_input third_party/nix/libxcrypt ${libxcryptRoot}

@@ -1,3 +1,3 @@
 # OpenSSH Patches
 
-No OpenSSH patches are applied yet.
+- `enable-none-cipher.patch`: exposes OpenSSH's internal `none` cipher in cipher lists and validation.
