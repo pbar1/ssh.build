@@ -1,0 +1,3 @@
+**/BUCK linguist-language=Starlark
+**/*.bazel linguist-language=Starlark
+**/*.bzl linguist-language=Starlark

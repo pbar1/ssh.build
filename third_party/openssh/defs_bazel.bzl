@@ -3,6 +3,5 @@ def openssh_binary(name, srcs, copts, deps):
         name = name,
         srcs = srcs,
         copts = copts,
-        linkopts = ["-lsandbox"],
         deps = deps,
     )

@@ -28,7 +28,7 @@ filegroup(
     ],
 )
 
-alias(name = "libssh", actual = "@openssh_src//:libssh")
+alias(name = "openssh_core", actual = "@openssh_src//:openssh_core")
 alias(name = "openbsd_compat", actual = "@openssh_src//:openbsd_compat")
 
 alias(name = "scp", actual = "@openssh_src//:scp")
