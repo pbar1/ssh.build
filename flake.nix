@@ -39,8 +39,6 @@
         system:
         let
           pkgs = import nixpkgs { inherit system; };
-          localPatches = import ./nix/patches.nix;
-
           patchedSource =
             name: src: patches:
             if patches == [ ] then
@@ -50,12 +48,15 @@
                 inherit name src patches;
               };
 
-          opensshSource = patchedSource "openssh-10.4p1-patched-source" openssh-src localPatches.openssh;
-          libssh2Source = patchedSource "libssh2-1.11.1-patched-source" libssh2-src localPatches.libssh2;
+          opensshPatches = [ ./third_party/openssh/patches/enable-none-cipher.patch ];
+          libssh2Patches = [ ];
+
+          opensshSource = patchedSource "openssh-10.4p1-patched-source" openssh-src opensshPatches;
+          libssh2Source = patchedSource "libssh2-1.11.1-patched-source" libssh2-src libssh2Patches;
 
           mkOpenSsh =
             withTests:
-            pkgs.callPackage ./nix/packages/openssh.nix {
+            pkgs.callPackage ./third_party/openssh {
               src = opensshSource;
               inherit withTests;
             };
@@ -65,7 +66,7 @@
 
           mkLibssh2 =
             withTests:
-            pkgs.callPackage ./nix/packages/libssh2.nix (
+            pkgs.callPackage ./third_party/libssh2 (
               {
                 src = libssh2Source;
                 inherit withTests;

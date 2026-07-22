@@ -1,6 +1,6 @@
 # OpenSSH
 
-OpenSSH portable 10.4p1 is pinned as a flake input. The upstream source is not vendored; `nix develop` prepares the ignored `third_party/openssh/src` source view used by Bazel and Buck2, including patches from `nix/patches.nix`.
+OpenSSH portable 10.4p1 is pinned as a flake input. The upstream source is not vendored; `nix develop` prepares the ignored `third_party/openssh/src` source view used by Bazel and Buck2, including patches from `third_party/openssh/patches`.
 
 ## Build
 
