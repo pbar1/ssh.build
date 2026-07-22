@@ -1,0 +1,57 @@
+diff --git a/mac.c b/mac.c
+index 075d80a67..46e705bae 100644
+--- a/mac.c
++++ b/mac.c
+@@ -41,6 +41,7 @@
+ 
+ #include "openbsd-compat/openssl-compat.h"
+ 
++#define SSH_NONE	0
+ #define SSH_DIGEST	1	/* SSH_DIGEST_XXX */
+ #define SSH_UMAC	2	/* UMAC (not integrated with OpenSSL) */
+ #define SSH_UMAC128	3
+@@ -76,6 +77,8 @@ static const struct macalg macs[] = {
+ 	{ "umac-64-etm@openssh.com",		SSH_UMAC, 0, 0, 128, 64, 1 },
+ 	{ "umac-128-etm@openssh.com",		SSH_UMAC128, 0, 0, 128, 128, 1 },
+ 
++	{ "none",					SSH_NONE, 0, 0, 0, 0, 0 },
++
+ 	{ NULL,					0, 0, 0, 0, 0, 0 }
+ };
+ 
+@@ -97,6 +100,8 @@ mac_setup_by_alg(struct sshmac *mac, const struct macalg *macalg)
+ {
+ 	mac->type = macalg->type;
+-	if (mac->type == SSH_DIGEST) {
++	if (mac->type == SSH_NONE) {
++		mac->key_len = mac->mac_len = 0;
++	} else if (mac->type == SSH_DIGEST) {
+ 		if ((mac->hmac_ctx = ssh_hmac_start(macalg->alg)) == NULL)
+ 			return SSH_ERR_ALLOC_FAIL;
+ 		mac->key_len = mac->mac_len = ssh_hmac_bytes(macalg->alg);
+@@ -132,4 +137,6 @@ mac_init(struct sshmac *mac)
+ {
++	if (mac->type == SSH_NONE)
++		return 0;
+ 	if (mac->key == NULL)
+ 		return SSH_ERR_INVALID_ARGUMENT;
+ 	switch (mac->type) {
+@@ -167,6 +175,8 @@ mac_compute(struct sshmac *mac, uint32_t seqno,
+ 	if (mac->mac_len > sizeof(u))
+ 		return SSH_ERR_INTERNAL_ERROR;
+ 
++	if (mac->type == SSH_NONE)
++		return 0;
+ 	switch (mac->type) {
+ 	case SSH_DIGEST:
+ 		put_u32(b, seqno);
+@@ -207,7 +217,9 @@ mac_check(struct sshmac *mac, uint32_t seqno,
+ 	int r;
+ 
+ 	if (mac->mac_len > mlen)
+ 		return SSH_ERR_INVALID_ARGUMENT;
++	if (mac->type == SSH_NONE)
++		return 0;
+ 	if ((r = mac_compute(mac, seqno, data, dlen,
+ 	    ourmac, sizeof(ourmac))) != 0)
+ 		return r;

@@ -7,7 +7,10 @@
   openssl,
   zlib,
   mandoc,
-  patches ? [ ./patches/enable-none-cipher.patch ],
+  patches ? [
+    ./patches/enable-none-cipher.patch
+    ./patches/enable-none-mac.patch
+  ],
   withTests ? false,
 }:
 
