@@ -7,7 +7,13 @@
   openssl,
   zlib,
   testOpenSsh ? null,
-  patches ? [ ],
+  patches ? [
+    ./patches/cve-2026-7598.patch
+    ./patches/libssh-unconst-backport.patch
+    ./patches/CVE-2025-15661.patch
+    ./patches/CVE-2026-55199.patch
+    ./patches/CVE-2026-55200.patch
+  ],
   withTests ? false,
 }:
 
