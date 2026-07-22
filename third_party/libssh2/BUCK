@@ -46,8 +46,6 @@ _LIBSSH2_PREPROCESSOR_FLAGS = [
     "-Ithird_party/libssh2/config",
     "-Ithird_party/libssh2/src/include",
     "-Ithird_party/libssh2/src/src",
-    "-Ithird_party/nix/openssl/include",
-    "-Ithird_party/nix/zlib/include",
 ]
 
 cxx_library(
@@ -57,10 +55,9 @@ cxx_library(
     exported_preprocessor_flags = [
         "-Ithird_party/libssh2/src/include",
     ],
-    linker_flags = [
-        "third_party/nix/openssl/lib/libssl.dylib",
-        "third_party/nix/openssl/lib/libcrypto.dylib",
-        "third_party/nix/zlib/lib/libz.dylib",
+    deps = [
+        "//third_party/nixpkgs:openssl",
+        "//third_party/nixpkgs:zlib",
     ],
     preprocessor_flags = _LIBSSH2_PREPROCESSOR_FLAGS,
     visibility = ["PUBLIC"],

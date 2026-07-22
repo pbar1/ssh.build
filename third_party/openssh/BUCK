@@ -27,6 +27,13 @@ load(
     "SSHD_SRCS",
 )
 
+_NIXPKGS_DEPS = [
+    "//third_party/nixpkgs:darwin_libresolv",
+    "//third_party/nixpkgs:libxcrypt",
+    "//third_party/nixpkgs:openssl",
+    "//third_party/nixpkgs:zlib",
+]
+
 _OPENSSH_HEADERS = glob([
     "config/darwin/**/*.h",
     "src/*.h",
@@ -39,6 +46,7 @@ cxx_library(
     name = "openbsd_compat",
     srcs = openssh_srcs(OPENBSD_COMPAT_SRCS),
     compiler_flags = OPENSSH_COMPILER_FLAGS,
+    deps = _NIXPKGS_DEPS,
     exported_preprocessor_flags = OPENSSH_PREPROCESSOR_FLAGS,
     headers = _OPENSSH_HEADERS,
     preferred_linkage = "static",
@@ -50,7 +58,8 @@ cxx_library(
     name = "openssh_core",
     srcs = openssh_srcs(OPENSSH_CORE_SRCS),
     compiler_flags = OPENSSH_COMPILER_FLAGS,
-    deps = [":openbsd_compat"],
+    deps = [":openbsd_compat"] + _NIXPKGS_DEPS,
+    exported_deps = _NIXPKGS_DEPS,
     exported_linker_flags = OPENSSH_LINKER_FLAGS,
     exported_preprocessor_flags = OPENSSH_PREPROCESSOR_FLAGS,
     headers = _OPENSSH_HEADERS,

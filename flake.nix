@@ -39,36 +39,22 @@
         system:
         let
           pkgs = import nixpkgs { inherit system; };
-          patchedSource =
-            name: src: patches:
-            if patches == [ ] then
-              src
-            else
-              pkgs.applyPatches {
-                inherit name src patches;
-              };
-
-          opensshPatches = [ ./third_party/openssh/patches/enable-none-cipher.patch ];
-          libssh2Patches = [ ];
-
-          opensshSource = patchedSource "openssh-10.4p1-patched-source" openssh-src opensshPatches;
-          libssh2Source = patchedSource "libssh2-1.11.1-patched-source" libssh2-src libssh2Patches;
-
           mkOpenSsh =
             withTests:
             pkgs.callPackage ./third_party/openssh {
-              src = opensshSource;
+              src = openssh-src;
               inherit withTests;
             };
 
           openssh = mkOpenSsh false;
           openssh-tests = mkOpenSsh true;
+          opensshSource = openssh.passthru.patchedSource;
 
           mkLibssh2 =
             withTests:
             pkgs.callPackage ./third_party/libssh2 (
               {
-                src = libssh2Source;
+                src = libssh2-src;
                 inherit withTests;
               }
               // pkgs.lib.optionalAttrs withTests {
@@ -78,6 +64,7 @@
 
           libssh2 = mkLibssh2 false;
           libssh2-tests = mkLibssh2 true;
+          libssh2Source = libssh2.passthru.patchedSource;
 
           opensslRoot = pkgs.symlinkJoin {
             name = "openssl-root";
@@ -169,14 +156,14 @@
               }
 
               if [ -d third_party/openssh ] && [ -d third_party/libssh2 ]; then
-                mkdir -p third_party/nix
+                mkdir -p third_party/nixpkgs
                 link_dev_input third_party/openssh/src ${opensshSource}
                 link_dev_input third_party/libssh2/src ${libssh2Source}
-                link_dev_input third_party/nix/openssl ${opensslRoot}
-                link_dev_input third_party/nix/zlib ${zlibRoot}
-                link_dev_input third_party/nix/libxcrypt ${libxcryptRoot}
+                link_dev_input third_party/nixpkgs/openssl ${opensslRoot}
+                link_dev_input third_party/nixpkgs/zlib ${zlibRoot}
+                link_dev_input third_party/nixpkgs/libxcrypt ${libxcryptRoot}
                 if [ -n "${darwinLibresolvRoot}" ]; then
-                  link_dev_input third_party/nix/darwin-libresolv ${darwinLibresolvRoot}
+                  link_dev_input third_party/nixpkgs/darwin-libresolv ${darwinLibresolvRoot}
                 fi
               fi
             '';

@@ -1,20 +1,32 @@
 {
   lib,
   stdenv,
+  applyPatches,
   src,
   pkg-config,
   openssl,
   zlib,
   mandoc,
-  patches ? [ ],
+  patches ? [ ./patches/enable-none-cipher.patch ],
   withTests ? false,
 }:
 
+let
+  version = "10.4p1";
+  patchedSource =
+    if patches == [ ] then
+      src
+    else
+      applyPatches {
+        name = "openssh-${version}-patched-source";
+        inherit src patches;
+      };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openssh" + lib.optionalString withTests "-tests";
-  version = "10.4p1";
+  inherit version;
 
-  inherit src patches;
+  src = patchedSource;
 
   outputs = [
     "out"
@@ -84,5 +96,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
     mainProgram = "ssh";
+  };
+
+  passthru = {
+    inherit patchedSource patches;
   };
 })

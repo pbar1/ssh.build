@@ -1,0 +1,30 @@
+prebuilt_cxx_library(
+    name = "openssl",
+    exported_linker_flags = [
+        "third_party/nixpkgs/openssl/lib/libssl.dylib",
+        "third_party/nixpkgs/openssl/lib/libcrypto.dylib",
+    ],
+    header_dirs = ["openssl/include"],
+    visibility = ["PUBLIC"],
+)
+
+prebuilt_cxx_library(
+    name = "zlib",
+    exported_linker_flags = ["third_party/nixpkgs/zlib/lib/libz.dylib"],
+    header_dirs = ["zlib/include"],
+    visibility = ["PUBLIC"],
+)
+
+prebuilt_cxx_library(
+    name = "libxcrypt",
+    exported_linker_flags = ["third_party/nixpkgs/libxcrypt/lib/libcrypt.dylib"],
+    header_dirs = ["libxcrypt/include"],
+    visibility = ["PUBLIC"],
+)
+
+prebuilt_cxx_library(
+    name = "darwin_libresolv",
+    exported_linker_flags = ["third_party/nixpkgs/darwin-libresolv/lib/libresolv.dylib"],
+    header_dirs = ["darwin-libresolv/include"],
+    visibility = ["PUBLIC"],
+)

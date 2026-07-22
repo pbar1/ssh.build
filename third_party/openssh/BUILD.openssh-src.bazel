@@ -40,9 +40,9 @@ cc_library(
         "openbsd-compat",
     ],
     deps = [
-        "@nix_libxcrypt//:headers",
-        "@nix_openssl//:headers",
-        "@ssh_build//third_party/nix:darwin_libresolv",
+        "@nixpkgs_libxcrypt//:headers",
+        "@nixpkgs_openssl//:headers",
+        "@ssh_build//third_party/nixpkgs:darwin_libresolv",
         "@ssh_build//third_party/openssh:openssh_config",
     ],
 )
@@ -59,10 +59,10 @@ cc_library(
     ],
     deps = [
         ":openbsd_compat",
-        "@nix_libxcrypt//:libxcrypt",
-        "@nix_openssl//:openssl",
-        "@nix_zlib//:zlib",
-        "@ssh_build//third_party/nix:darwin_libresolv",
+        "@nixpkgs_libxcrypt//:libxcrypt",
+        "@nixpkgs_openssl//:openssl",
+        "@nixpkgs_zlib//:zlib",
+        "@ssh_build//third_party/nixpkgs:darwin_libresolv",
         "@ssh_build//third_party/openssh:openssh_config",
     ],
 )
@@ -70,99 +70,71 @@ cc_library(
 openssh_binary(
     name = "scp",
     srcs = SCP_SRCS,
-    copts = OPENSSH_COMMON_COPTS,
-    deps = [":openssh_core"],
 )
 
 openssh_binary(
     name = "sftp",
     srcs = SFTP_SRCS,
-    copts = OPENSSH_COMMON_COPTS,
-    deps = [":openssh_core"],
 )
 
 openssh_binary(
     name = "sftp-server",
     srcs = SFTP_SERVER_SRCS,
-    copts = OPENSSH_COMMON_COPTS,
-    deps = [":openssh_core"],
 )
 
 openssh_binary(
     name = "ssh",
     srcs = SSH_SRCS,
-    copts = OPENSSH_COMMON_COPTS,
-    deps = [":openssh_core"],
 )
 
 openssh_binary(
     name = "ssh-add",
     srcs = SSH_ADD_SRCS,
-    copts = OPENSSH_COMMON_COPTS,
-    deps = [":openssh_core"],
 )
 
 openssh_binary(
     name = "ssh-agent",
     srcs = SSH_AGENT_SRCS,
-    copts = OPENSSH_COMMON_COPTS,
-    deps = [":openssh_core"],
 )
 
 openssh_binary(
     name = "ssh-keygen",
     srcs = SSH_KEYGEN_SRCS,
-    copts = OPENSSH_COMMON_COPTS,
-    deps = [":openssh_core"],
 )
 
 openssh_binary(
     name = "ssh-keyscan",
     srcs = SSH_KEYSCAN_SRCS,
-    copts = OPENSSH_COMMON_COPTS,
-    deps = [":openssh_core"],
 )
 
 openssh_binary(
     name = "ssh-keysign",
     srcs = SSH_KEYSIGN_SRCS,
-    copts = OPENSSH_COMMON_COPTS,
-    deps = [":openssh_core"],
 )
 
 openssh_binary(
     name = "ssh-pkcs11-helper",
     srcs = SSH_PKCS11_HELPER_SRCS,
-    copts = OPENSSH_COMMON_COPTS,
-    deps = [":openssh_core"],
 )
 
 openssh_binary(
     name = "ssh-sk-helper",
     srcs = SSH_SK_HELPER_SRCS,
-    copts = OPENSSH_COMMON_COPTS,
-    deps = [":openssh_core"],
 )
 
 openssh_binary(
     name = "sshd",
     srcs = SSHD_SRCS,
-    copts = OPENSSH_COMMON_COPTS,
-    deps = [":openssh_core"],
 )
 
 openssh_binary(
     name = "sshd-auth",
     srcs = SSHD_AUTH_SRCS,
-    copts = OPENSSH_COMMON_COPTS,
-    deps = [":openssh_core"],
 )
 
 openssh_binary(
     name = "sshd-session",
     srcs = SSHD_SESSION_SRCS,
-    copts = OPENSSH_COMMON_COPTS,
-    deps = [":openssh_core"],
 )
 
 filegroup(

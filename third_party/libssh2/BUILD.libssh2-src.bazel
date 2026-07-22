@@ -55,8 +55,8 @@ cc_library(
         "HAVE_CONFIG_H",
     ],
     deps = [
-        "@nix_openssl//:openssl",
-        "@nix_zlib//:zlib",
+        "@nixpkgs_openssl//:openssl",
+        "@nixpkgs_zlib//:zlib",
         "@ssh_build//third_party/libssh2:libssh2_config",
     ],
 )

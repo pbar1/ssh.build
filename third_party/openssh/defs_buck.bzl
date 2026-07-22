@@ -1,10 +1,5 @@
 load(
     ":defs_shared.bzl",
-    "NIX_DARWIN_LIBRESOLV_DYLIB",
-    "NIX_LIBXCRYPT_DYLIB",
-    "NIX_OPENSSL_CRYPTO_DYLIB",
-    "NIX_OPENSSL_SSL_DYLIB",
-    "NIX_ZLIB_DYLIB",
     "OPENSSH_DARWIN_MIN_OS_FLAG",
     "OPENSSH_OPENSSL_API_DEFINE",
     "OPENSSH_UNGUARDED_AVAILABILITY_COPT",
@@ -22,20 +17,9 @@ OPENSSH_PREPROCESSOR_FLAGS = [
     "-Ithird_party/openssh/config/darwin/openbsd-compat/include",
     "-Ithird_party/openssh/src",
     "-Ithird_party/openssh/src/openbsd-compat",
-    "-Ithird_party/nix/darwin-libresolv/include",
-    "-Ithird_party/nix/libxcrypt/include",
-    "-Ithird_party/nix/openssl/include",
-    "-Ithird_party/nix/zlib/include",
 ]
 
-OPENSSH_LINKER_FLAGS = [
-    OPENSSH_DARWIN_MIN_OS_FLAG,
-    NIX_DARWIN_LIBRESOLV_DYLIB,
-    NIX_LIBXCRYPT_DYLIB,
-    NIX_OPENSSL_CRYPTO_DYLIB,
-    NIX_OPENSSL_SSL_DYLIB,
-    NIX_ZLIB_DYLIB,
-]
+OPENSSH_LINKER_FLAGS = [OPENSSH_DARWIN_MIN_OS_FLAG]
 
 def openssh_srcs(srcs):
     return ["src/" + src for src in srcs]

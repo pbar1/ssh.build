@@ -13,19 +13,19 @@ new_local_repository(
 )
 
 new_local_repository(
-    name = "nix_openssl",
-    build_file = "//third_party/nix:BUILD.openssl.bazel",
-    path = "third_party/nix/openssl",
+    name = "nixpkgs_openssl",
+    build_file = "//third_party/nixpkgs:BUILD.openssl.bazel",
+    path = "third_party/nixpkgs/openssl",
 )
 
 new_local_repository(
-    name = "nix_zlib",
-    build_file = "//third_party/nix:BUILD.zlib.bazel",
-    path = "third_party/nix/zlib",
+    name = "nixpkgs_zlib",
+    build_file = "//third_party/nixpkgs:BUILD.zlib.bazel",
+    path = "third_party/nixpkgs/zlib",
 )
 
 new_local_repository(
-    name = "nix_libxcrypt",
-    build_file = "//third_party/nix:BUILD.libxcrypt.bazel",
-    path = "third_party/nix/libxcrypt",
+    name = "nixpkgs_libxcrypt",
+    build_file = "//third_party/nixpkgs:BUILD.libxcrypt.bazel",
+    path = "third_party/nixpkgs/libxcrypt",
 )

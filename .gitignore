@@ -7,7 +7,7 @@ buck-out/
 .jj/
 third_party/openssh/src
 third_party/libssh2/src
-third_party/nix/openssl
-third_party/nix/zlib
-third_party/nix/libxcrypt
-third_party/nix/darwin-libresolv
+third_party/nixpkgs/openssl
+third_party/nixpkgs/zlib
+third_party/nixpkgs/libxcrypt
+third_party/nixpkgs/darwin-libresolv

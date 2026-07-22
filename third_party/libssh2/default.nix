@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  applyPatches,
   src,
   pkg-config,
   openssl,
@@ -12,11 +13,22 @@
 
 assert !withTests || testOpenSsh != null;
 
+let
+  version = "1.11.1";
+  patchedSource =
+    if patches == [ ] then
+      src
+    else
+      applyPatches {
+        name = "libssh2-${version}-patched-source";
+        inherit src patches;
+      };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libssh2" + lib.optionalString withTests "-tests";
-  version = "1.11.1";
+  inherit version;
 
-  inherit src patches;
+  src = patchedSource;
 
   outputs = [
     "out"
@@ -57,5 +69,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://libssh2.org/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+  };
+
+  passthru = {
+    inherit patchedSource patches;
   };
 })

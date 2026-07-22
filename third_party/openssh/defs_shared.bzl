@@ -7,12 +7,6 @@ OPENSSH_COMMON_COPTS = [
     OPENSSH_UNGUARDED_AVAILABILITY_COPT,
 ]
 
-NIX_DARWIN_LIBRESOLV_DYLIB = "third_party/nix/darwin-libresolv/lib/libresolv.dylib"
-NIX_LIBXCRYPT_DYLIB = "third_party/nix/libxcrypt/lib/libcrypt.dylib"
-NIX_OPENSSL_CRYPTO_DYLIB = "third_party/nix/openssl/lib/libcrypto.dylib"
-NIX_OPENSSL_SSL_DYLIB = "third_party/nix/openssl/lib/libssl.dylib"
-NIX_ZLIB_DYLIB = "third_party/nix/zlib/lib/libz.dylib"
-
 OPENBSD_COMPAT_SRCS = [
     "openbsd-compat/arc4random.c",
     "openbsd-compat/arc4random_uniform.c",
