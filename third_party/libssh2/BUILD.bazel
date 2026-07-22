@@ -1,0 +1,18 @@
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "libssh2_config",
+    hdrs = ["config/libssh2_config.h"],
+    includes = ["config"],
+)
+
+alias(
+    name = "libssh2",
+    actual = "@libssh2_src//:libssh2",
+)
+
+cc_test(
+    name = "libssh2_smoke_test",
+    srcs = ["tests/smoke.c"],
+    deps = [":libssh2"],
+)

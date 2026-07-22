@@ -1,0 +1,5 @@
+export_file(
+    name = "stamp_test",
+    src = "stamp_test.sh",
+    visibility = ["PUBLIC"],
+)

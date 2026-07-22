@@ -1,0 +1,42 @@
+package(default_visibility = ["//visibility:public"])
+
+config_setting(
+    name = "darwin",
+    constraint_values = ["@platforms//os:macos"],
+)
+
+config_setting(
+    name = "linux",
+    constraint_values = ["@platforms//os:linux"],
+)
+
+cc_library(
+    name = "headers",
+    hdrs = glob(["include/**/*.h"]),
+    includes = ["include"],
+)
+
+cc_import(
+    name = "crypto",
+    shared_library = select({
+        ":darwin": "lib/libcrypto.dylib",
+        ":linux": "lib/libcrypto.so",
+    }),
+)
+
+cc_import(
+    name = "ssl",
+    shared_library = select({
+        ":darwin": "lib/libssl.dylib",
+        ":linux": "lib/libssl.so",
+    }),
+)
+
+cc_library(
+    name = "openssl",
+    deps = [
+        ":crypto",
+        ":headers",
+        ":ssl",
+    ],
+)

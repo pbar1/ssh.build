@@ -1,0 +1,67 @@
+package(default_visibility = ["//visibility:public"])
+
+exports_files(["configure"])
+
+_LIBSSH2_SRCS = [
+    "src/agent.c",
+    "src/bcrypt_pbkdf.c",
+    "src/channel.c",
+    "src/comp.c",
+    "src/chacha.c",
+    "src/cipher-chachapoly.c",
+    "src/crypt.c",
+    "src/crypto.c",
+    "src/global.c",
+    "src/hostkey.c",
+    "src/keepalive.c",
+    "src/kex.c",
+    "src/knownhost.c",
+    "src/mac.c",
+    "src/misc.c",
+    "src/packet.c",
+    "src/pem.c",
+    "src/poly1305.c",
+    "src/publickey.c",
+    "src/scp.c",
+    "src/session.c",
+    "src/sftp.c",
+    "src/transport.c",
+    "src/userauth.c",
+    "src/userauth_kbd_packet.c",
+    "src/version.c",
+]
+
+cc_library(
+    name = "libssh2",
+    srcs = _LIBSSH2_SRCS,
+    hdrs = glob([
+        "include/*.h",
+        "src/*.h",
+    ]) + ["@ssh_build//third_party/libssh2:libssh2_config"],
+    textual_hdrs = [
+        "src/agent_win.c",
+        "src/blowfish.c",
+        "src/libgcrypt.c",
+        "src/mbedtls.c",
+        "src/openssl.c",
+        "src/os400qc3.c",
+        "src/wincng.c",
+    ],
+    includes = [
+        "include",
+        "src",
+    ],
+    local_defines = [
+        "HAVE_CONFIG_H",
+    ],
+    deps = [
+        "@nix_openssl//:openssl",
+        "@nix_zlib//:zlib",
+        "@ssh_build//third_party/libssh2:libssh2_config",
+    ],
+)
+
+filegroup(
+    name = "all_srcs",
+    srcs = glob(["**"]),
+)

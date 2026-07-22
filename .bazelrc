@@ -1,0 +1,14 @@
+common --noenable_bzlmod
+common --enable_workspace
+build --verbose_failures
+build --macos_minimum_os=14.0
+build --action_env=PATH
+build --action_env=OPENSSL_ROOT
+build --action_env=ZLIB_ROOT
+build --action_env=PKG_CONFIG_PATH
+build --action_env=DARWIN_LIBRESOLV_ROOT
+test --test_env=PATH
+test --test_env=OPENSSL_ROOT
+test --test_env=ZLIB_ROOT
+test --test_env=PKG_CONFIG_PATH
+test --test_env=DARWIN_LIBRESOLV_ROOT

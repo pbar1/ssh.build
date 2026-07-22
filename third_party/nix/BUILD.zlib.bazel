@@ -1,0 +1,33 @@
+package(default_visibility = ["//visibility:public"])
+
+config_setting(
+    name = "darwin",
+    constraint_values = ["@platforms//os:macos"],
+)
+
+config_setting(
+    name = "linux",
+    constraint_values = ["@platforms//os:linux"],
+)
+
+cc_library(
+    name = "headers",
+    hdrs = glob(["include/**/*.h"]),
+    includes = ["include"],
+)
+
+cc_import(
+    name = "libz",
+    shared_library = select({
+        ":darwin": "lib/libz.dylib",
+        ":linux": "lib/libz.so",
+    }),
+)
+
+cc_library(
+    name = "zlib",
+    deps = [
+        ":headers",
+        ":libz",
+    ],
+)

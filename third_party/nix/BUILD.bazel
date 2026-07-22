@@ -1,0 +1,26 @@
+package(default_visibility = ["//visibility:public"])
+
+exports_files([
+    "BUILD.libxcrypt.bazel",
+    "BUILD.openssl.bazel",
+    "BUILD.zlib.bazel",
+])
+
+cc_library(
+    name = "darwin_libresolv_headers",
+    hdrs = glob(["darwin-libresolv/include/**/*.h"]),
+    includes = ["darwin-libresolv/include"],
+)
+
+cc_import(
+    name = "darwin_libresolv_shared",
+    shared_library = "darwin-libresolv/lib/libresolv.dylib",
+)
+
+cc_library(
+    name = "darwin_libresolv",
+    deps = [
+        ":darwin_libresolv_headers",
+        ":darwin_libresolv_shared",
+    ],
+)

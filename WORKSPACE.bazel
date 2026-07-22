@@ -1,0 +1,31 @@
+workspace(name = "ssh_build")
+
+new_local_repository(
+    name = "openssh_src",
+    build_file = "//third_party/openssh:BUILD.openssh-src.bazel",
+    path = "third_party/openssh/src",
+)
+
+new_local_repository(
+    name = "libssh2_src",
+    build_file = "//third_party/libssh2:BUILD.libssh2-src.bazel",
+    path = "third_party/libssh2/src",
+)
+
+new_local_repository(
+    name = "nix_openssl",
+    build_file = "//third_party/nix:BUILD.openssl.bazel",
+    path = "third_party/nix/openssl",
+)
+
+new_local_repository(
+    name = "nix_zlib",
+    build_file = "//third_party/nix:BUILD.zlib.bazel",
+    path = "third_party/nix/zlib",
+)
+
+new_local_repository(
+    name = "nix_libxcrypt",
+    build_file = "//third_party/nix:BUILD.libxcrypt.bazel",
+    path = "third_party/nix/libxcrypt",
+)

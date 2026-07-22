@@ -1,0 +1,49 @@
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "openssh_config",
+    hdrs = [
+        "config/darwin/config.h",
+        "config/darwin/openbsd-compat/include/endian.h",
+        "config/darwin/openbsd-compat/include/glob.h",
+        "config/darwin/openbsd-compat/include/netgroup.h",
+        "config/darwin/openbsd-compat/include/sys/queue.h",
+        "config/darwin/openbsd-compat/include/sys/tree.h",
+    ],
+    includes = [
+        "config/darwin",
+        "config/darwin/openbsd-compat/include",
+    ],
+)
+
+filegroup(
+    name = "openssh_config_hdrs",
+    srcs = [
+        "config/darwin/config.h",
+        "config/darwin/openbsd-compat/include/endian.h",
+        "config/darwin/openbsd-compat/include/glob.h",
+        "config/darwin/openbsd-compat/include/netgroup.h",
+        "config/darwin/openbsd-compat/include/sys/queue.h",
+        "config/darwin/openbsd-compat/include/sys/tree.h",
+    ],
+)
+
+alias(name = "libssh", actual = "@openssh_src//:libssh")
+alias(name = "openbsd_compat", actual = "@openssh_src//:openbsd_compat")
+
+alias(name = "scp", actual = "@openssh_src//:scp")
+alias(name = "sftp", actual = "@openssh_src//:sftp")
+alias(name = "sftp-server", actual = "@openssh_src//:sftp-server")
+alias(name = "ssh", actual = "@openssh_src//:ssh")
+alias(name = "ssh-add", actual = "@openssh_src//:ssh-add")
+alias(name = "ssh-agent", actual = "@openssh_src//:ssh-agent")
+alias(name = "ssh-keygen", actual = "@openssh_src//:ssh-keygen")
+alias(name = "ssh-keyscan", actual = "@openssh_src//:ssh-keyscan")
+alias(name = "ssh-keysign", actual = "@openssh_src//:ssh-keysign")
+alias(name = "ssh-pkcs11-helper", actual = "@openssh_src//:ssh-pkcs11-helper")
+alias(name = "ssh-sk-helper", actual = "@openssh_src//:ssh-sk-helper")
+alias(name = "sshd", actual = "@openssh_src//:sshd")
+alias(name = "sshd-auth", actual = "@openssh_src//:sshd-auth")
+alias(name = "sshd-session", actual = "@openssh_src//:sshd-session")
+
+alias(name = "openssh", actual = "@openssh_src//:openssh")

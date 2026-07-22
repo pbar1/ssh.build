@@ -1,0 +1,73 @@
+_LIBSSH2_SRCS = [
+    "src/src/agent.c",
+    "src/src/bcrypt_pbkdf.c",
+    "src/src/channel.c",
+    "src/src/comp.c",
+    "src/src/chacha.c",
+    "src/src/cipher-chachapoly.c",
+    "src/src/crypt.c",
+    "src/src/crypto.c",
+    "src/src/global.c",
+    "src/src/hostkey.c",
+    "src/src/keepalive.c",
+    "src/src/kex.c",
+    "src/src/knownhost.c",
+    "src/src/mac.c",
+    "src/src/misc.c",
+    "src/src/packet.c",
+    "src/src/pem.c",
+    "src/src/poly1305.c",
+    "src/src/publickey.c",
+    "src/src/scp.c",
+    "src/src/session.c",
+    "src/src/sftp.c",
+    "src/src/transport.c",
+    "src/src/userauth.c",
+    "src/src/userauth_kbd_packet.c",
+    "src/src/version.c",
+]
+
+_LIBSSH2_HEADERS = glob([
+    "src/include/*.h",
+    "src/src/*.h",
+]) + [
+    "config/libssh2_config.h",
+    "src/src/agent_win.c",
+    "src/src/blowfish.c",
+    "src/src/libgcrypt.c",
+    "src/src/mbedtls.c",
+    "src/src/openssl.c",
+    "src/src/os400qc3.c",
+    "src/src/wincng.c",
+]
+
+_LIBSSH2_PREPROCESSOR_FLAGS = [
+    "-DHAVE_CONFIG_H",
+    "-Ithird_party/libssh2/config",
+    "-Ithird_party/libssh2/src/include",
+    "-Ithird_party/libssh2/src/src",
+    "-Ithird_party/nix/openssl/include",
+    "-Ithird_party/nix/zlib/include",
+]
+
+cxx_library(
+    name = "libssh2",
+    srcs = _LIBSSH2_SRCS,
+    headers = _LIBSSH2_HEADERS,
+    exported_preprocessor_flags = [
+        "-Ithird_party/libssh2/src/include",
+    ],
+    linker_flags = [
+        "third_party/nix/openssl/lib/libssl.dylib",
+        "third_party/nix/openssl/lib/libcrypto.dylib",
+        "third_party/nix/zlib/lib/libz.dylib",
+    ],
+    preprocessor_flags = _LIBSSH2_PREPROCESSOR_FLAGS,
+    visibility = ["PUBLIC"],
+)
+
+cxx_test(
+    name = "libssh2_smoke_test",
+    srcs = ["tests/smoke.c"],
+    deps = [":libssh2"],
+)
