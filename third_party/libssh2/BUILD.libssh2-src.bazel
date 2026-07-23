@@ -38,6 +38,13 @@ cc_library(
         "include/*.h",
         "src/*.h",
     ]) + ["@ssh_build//third_party/libssh2:libssh2_config"],
+    includes = [
+        "include",
+        "src",
+    ],
+    local_defines = [
+        "HAVE_CONFIG_H",
+    ],
     textual_hdrs = [
         "src/agent_win.c",
         "src/blowfish.c",
@@ -46,13 +53,6 @@ cc_library(
         "src/openssl.c",
         "src/os400qc3.c",
         "src/wincng.c",
-    ],
-    includes = [
-        "include",
-        "src",
-    ],
-    local_defines = [
-        "HAVE_CONFIG_H",
     ],
     deps = [
         "@nixpkgs_openssl//:openssl",

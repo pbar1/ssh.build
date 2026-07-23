@@ -45,7 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-  ] ++ lib.optional withTests testOpenSsh;
+  ]
+  ++ lib.optional withTests testOpenSsh;
 
   buildInputs = [
     openssl

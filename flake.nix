@@ -4,6 +4,10 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     openssh-src = {
       url = "https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-10.4p1.tar.gz";
       flake = false;
@@ -18,11 +22,16 @@
     inputs@{
       flake-parts,
       nixpkgs,
+      treefmt-nix,
       openssh-src,
       libssh2-src,
       ...
     }:
     flake-parts.lib.mkFlake { inherit inputs; } {
+      imports = [
+        treefmt-nix.flakeModule
+      ];
+
       systems = [
         "aarch64-darwin"
         "aarch64-linux"
@@ -86,13 +95,9 @@
               "libssh2-cross-${targetSystem}" = crossLibssh2;
             };
 
-          crossPackages =
-            pkgs.lib.concatMapAttrs mkCrossPackages (
-              pkgs.lib.filterAttrs (
-                targetSystem: _target:
-                targetSystem != system
-              ) crossTargets
-            );
+          crossPackages = pkgs.lib.concatMapAttrs mkCrossPackages (
+            pkgs.lib.filterAttrs (targetSystem: _target: targetSystem != system) crossTargets
+          );
 
           opensslRoot = pkgs.symlinkJoin {
             name = "openssl-root";
@@ -127,7 +132,35 @@
         {
           packages = {
             inherit openssh libssh2;
-          } // crossPackages;
+          }
+          // crossPackages;
+
+          treefmt = {
+            settings.excludes = [
+              ".cache/*"
+              "bazel-*"
+              "buck-out/*"
+              "third_party/libssh2/src/*"
+              "third_party/nixpkgs/*"
+              "third_party/openssh/src/*"
+            ];
+
+            programs = {
+              buildifier = {
+                enable = true;
+                includes = [
+                  "*.bazel"
+                  "*.bzl"
+                  "BUILD"
+                  "BUILD.bazel"
+                  "BUCK"
+                  "WORKSPACE"
+                  "WORKSPACE.bazel"
+                ];
+              };
+              nixfmt.enable = true;
+            };
+          };
 
           checks = {
             inherit openssh-tests libssh2-tests;

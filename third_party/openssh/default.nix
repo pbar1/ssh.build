@@ -40,7 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin mandoc;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin mandoc;
 
   buildInputs = [
     openssl

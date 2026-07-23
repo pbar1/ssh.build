@@ -8,6 +8,9 @@ load(
     "SCP_SRCS",
     "SFTP_SERVER_SRCS",
     "SFTP_SRCS",
+    "SSHD_AUTH_SRCS",
+    "SSHD_SESSION_SRCS",
+    "SSHD_SRCS",
     "SSH_ADD_SRCS",
     "SSH_AGENT_SRCS",
     "SSH_KEYGEN_SRCS",
@@ -16,9 +19,6 @@ load(
     "SSH_PKCS11_HELPER_SRCS",
     "SSH_SK_HELPER_SRCS",
     "SSH_SRCS",
-    "SSHD_AUTH_SRCS",
-    "SSHD_SESSION_SRCS",
-    "SSHD_SRCS",
 )
 
 package(default_visibility = ["//visibility:public"])
@@ -51,12 +51,12 @@ cc_library(
     name = "openssh_core",
     srcs = OPENSSH_CORE_SRCS,
     hdrs = _OPENSSH_HEADERS,
-    textual_hdrs = ["umac.c"],
     copts = OPENSSH_COMMON_COPTS,
     includes = [
         ".",
         "openbsd-compat",
     ],
+    textual_hdrs = ["umac.c"],
     deps = [
         ":openbsd_compat",
         "@nixpkgs_libxcrypt//:libxcrypt",

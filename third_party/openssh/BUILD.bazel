@@ -28,22 +28,87 @@ filegroup(
     ],
 )
 
-alias(name = "openssh_core", actual = "@openssh_src//:openssh_core")
-alias(name = "openbsd_compat", actual = "@openssh_src//:openbsd_compat")
+alias(
+    name = "openssh_core",
+    actual = "@openssh_src//:openssh_core",
+)
 
-alias(name = "scp", actual = "@openssh_src//:scp")
-alias(name = "sftp", actual = "@openssh_src//:sftp")
-alias(name = "sftp-server", actual = "@openssh_src//:sftp-server")
-alias(name = "ssh", actual = "@openssh_src//:ssh")
-alias(name = "ssh-add", actual = "@openssh_src//:ssh-add")
-alias(name = "ssh-agent", actual = "@openssh_src//:ssh-agent")
-alias(name = "ssh-keygen", actual = "@openssh_src//:ssh-keygen")
-alias(name = "ssh-keyscan", actual = "@openssh_src//:ssh-keyscan")
-alias(name = "ssh-keysign", actual = "@openssh_src//:ssh-keysign")
-alias(name = "ssh-pkcs11-helper", actual = "@openssh_src//:ssh-pkcs11-helper")
-alias(name = "ssh-sk-helper", actual = "@openssh_src//:ssh-sk-helper")
-alias(name = "sshd", actual = "@openssh_src//:sshd")
-alias(name = "sshd-auth", actual = "@openssh_src//:sshd-auth")
-alias(name = "sshd-session", actual = "@openssh_src//:sshd-session")
+alias(
+    name = "openbsd_compat",
+    actual = "@openssh_src//:openbsd_compat",
+)
 
-alias(name = "openssh", actual = "@openssh_src//:openssh")
+alias(
+    name = "scp",
+    actual = "@openssh_src//:scp",
+)
+
+alias(
+    name = "sftp",
+    actual = "@openssh_src//:sftp",
+)
+
+alias(
+    name = "sftp-server",
+    actual = "@openssh_src//:sftp-server",
+)
+
+alias(
+    name = "ssh",
+    actual = "@openssh_src//:ssh",
+)
+
+alias(
+    name = "ssh-add",
+    actual = "@openssh_src//:ssh-add",
+)
+
+alias(
+    name = "ssh-agent",
+    actual = "@openssh_src//:ssh-agent",
+)
+
+alias(
+    name = "ssh-keygen",
+    actual = "@openssh_src//:ssh-keygen",
+)
+
+alias(
+    name = "ssh-keyscan",
+    actual = "@openssh_src//:ssh-keyscan",
+)
+
+alias(
+    name = "ssh-keysign",
+    actual = "@openssh_src//:ssh-keysign",
+)
+
+alias(
+    name = "ssh-pkcs11-helper",
+    actual = "@openssh_src//:ssh-pkcs11-helper",
+)
+
+alias(
+    name = "ssh-sk-helper",
+    actual = "@openssh_src//:ssh-sk-helper",
+)
+
+alias(
+    name = "sshd",
+    actual = "@openssh_src//:sshd",
+)
+
+alias(
+    name = "sshd-auth",
+    actual = "@openssh_src//:sshd-auth",
+)
+
+alias(
+    name = "sshd-session",
+    actual = "@openssh_src//:sshd-session",
+)
+
+alias(
+    name = "openssh",
+    actual = "@openssh_src//:openssh",
+)
