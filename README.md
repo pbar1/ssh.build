@@ -15,6 +15,11 @@ Upstream sources are pinned as flake inputs and are not vendored in this reposit
 nix develop
 nix build .#openssh
 nix build .#libssh2
+# Cross packages are exposed when the target differs from the build system.
+# On a non-aarch64-linux builder:
+nix build .#openssh-cross-aarch64-linux
+# On a non-x86_64-linux builder:
+nix build .#libssh2-cross-x86_64-linux
 nix flake check
 nix develop -c bazel build //third_party/...
 nix develop -c bazel test //third_party/...

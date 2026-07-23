@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    flake-parts.url = "github:hercules-ci/flake-parts";
     openssh-src = {
       url = "https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-10.4p1.tar.gz";
       flake = false;
@@ -14,57 +15,84 @@
   };
 
   outputs =
-    {
+    inputs@{
+      flake-parts,
       nixpkgs,
       openssh-src,
       libssh2-src,
       ...
     }:
-    let
+    flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [
         "aarch64-darwin"
         "aarch64-linux"
         "x86_64-linux"
       ];
 
-      eachSystem = f:
-        builtins.listToAttrs (
-          map (system: {
-            name = system;
-            value = f system;
-          }) systems
-        );
-
-      mkSystem =
-        system:
+      perSystem =
+        { pkgs, system, ... }:
         let
-          pkgs = import nixpkgs { inherit system; };
+          crossTargets = {
+            "x86_64-linux" = {
+              config = "x86_64-unknown-linux-musl";
+            };
+            "aarch64-linux" = {
+              config = "aarch64-unknown-linux-musl";
+            };
+          };
+
           mkOpenSsh =
-            withTests:
-            pkgs.callPackage ./third_party/openssh {
+            pkgsFor: withTests:
+            pkgsFor.callPackage ./third_party/openssh {
               src = openssh-src;
               inherit withTests;
             };
 
-          openssh = mkOpenSsh false;
-          openssh-tests = mkOpenSsh true;
+          openssh = mkOpenSsh pkgs false;
+          openssh-tests = mkOpenSsh pkgs true;
           opensshSource = openssh.passthru.patchedSource;
 
           mkLibssh2 =
-            withTests:
-            pkgs.callPackage ./third_party/libssh2 (
+            pkgsFor: withTests: testOpenSsh:
+            pkgsFor.callPackage ./third_party/libssh2 (
               {
                 src = libssh2-src;
                 inherit withTests;
               }
-              // pkgs.lib.optionalAttrs withTests {
-                testOpenSsh = openssh;
+              // pkgsFor.lib.optionalAttrs withTests {
+                inherit testOpenSsh;
               }
             );
 
-          libssh2 = mkLibssh2 false;
-          libssh2-tests = mkLibssh2 true;
+          libssh2 = mkLibssh2 pkgs false null;
+          libssh2-tests = mkLibssh2 pkgs true openssh;
           libssh2Source = libssh2.passthru.patchedSource;
+
+          mkCrossPackages =
+            targetSystem: target:
+            let
+              crossPkgs = import nixpkgs {
+                localSystem = system;
+                crossSystem = {
+                  inherit (target) config;
+                };
+              };
+
+              crossOpenSsh = mkOpenSsh crossPkgs false;
+              crossLibssh2 = mkLibssh2 crossPkgs false null;
+            in
+            {
+              "openssh-cross-${targetSystem}" = crossOpenSsh;
+              "libssh2-cross-${targetSystem}" = crossLibssh2;
+            };
+
+          crossPackages =
+            pkgs.lib.concatMapAttrs mkCrossPackages (
+              pkgs.lib.filterAttrs (
+                targetSystem: _target:
+                targetSystem != system
+              ) crossTargets
+            );
 
           opensslRoot = pkgs.symlinkJoin {
             name = "openssl-root";
@@ -99,7 +127,7 @@
         {
           packages = {
             inherit openssh libssh2;
-          };
+          } // crossPackages;
 
           checks = {
             inherit openssh-tests libssh2-tests;
@@ -169,12 +197,5 @@
             '';
           };
         };
-
-      bySystem = eachSystem mkSystem;
-    in
-    {
-      packages = eachSystem (system: bySystem.${system}.packages);
-      checks = eachSystem (system: bySystem.${system}.checks);
-      devShells = eachSystem (system: bySystem.${system}.devShells);
     };
 }

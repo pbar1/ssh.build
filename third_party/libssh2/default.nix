@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  doCheck = withTests;
+  doCheck = withTests && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   enableParallelChecking = false;
   checkTarget = "check";
   preCheck = ''

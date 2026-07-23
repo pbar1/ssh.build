@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  doCheck = withTests;
+  doCheck = withTests && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   enableParallelChecking = false;
   checkTarget = "tests";
 
@@ -80,12 +80,11 @@ stdenv.mkDerivation (finalAttrs: {
   installTargets = [ "install-nokeys" ];
 
   postInstall = ''
-    cp contrib/ssh-copy-id $out/bin/
-    chmod +x $out/bin/ssh-copy-id
-    cp contrib/ssh-copy-id.1 $man/share/man/man1/
+    install -Dm755 contrib/ssh-copy-id $out/bin/ssh-copy-id
+    install -Dm644 contrib/ssh-copy-id.1 $man/share/man/man1/ssh-copy-id.1
   '';
 
-  doInstallCheck = true;
+  doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/ssh -V 2>&1 | grep 'OpenSSH_${finalAttrs.version}'
